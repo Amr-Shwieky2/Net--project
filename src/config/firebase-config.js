@@ -1,16 +1,19 @@
+// firebase-config.js
+
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage"; // Import Firebase Storage
 
+// Use environment variables
 const firebaseConfig = {
-  apiKey: "AIzaSyDb_f8g-Sxi_KnX3JqRbnpckc5NpTbG1XY",
-  authDomain: "netaproject-956a0.firebaseapp.com",
-  projectId: "netaproject-956a0",
-  storageBucket: "netaproject-956a0.appspot.com",
-  messagingSenderId: "1009751406228",
-  appId: "1:1009751406228:web:906c280f4972b80d062681",
-  measurementId: "G-4KQBK02FKJ"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
