@@ -1,122 +1,200 @@
-/* Main container for the page */
-.group-container {
-  width: 80%;
+/* mainPage.css */
+
+/* Container Styling */
+#group-container {
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  text-align: center;
 }
 
-h1 {
-  font-size: 2.5em;
-  color: #333;
+/* Page Title */
+#page-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: var(--dark-color);
   margin-bottom: 20px;
 }
 
-/* Style for the form to add a new group */
-.add-group-form {
+/* Form for Adding a New Group */
+#add-group-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-bottom: 40px;
-  background-color: #f9f9f9;
+  gap: 10px;
+  background-color: var(--light-color);
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
-.add-group-form input[type="text"],
-.add-group-form input[type="file"] {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ddd;
+#group-name-input,
+#group-image-input {
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
   width: 100%;
 }
 
-.add-group-form input[type="text"]::placeholder {
-  color: #aaa;
-}
-
-.add-group-form input[type="file"] {
-  padding: 5px;
-}
-
-.add-group-form button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px;
-  font-size: 18px;
+#add-group-button {
+  padding: 12px;
+  font-size: 1rem;
+  background-color: var(--button-bg-color);
+  color: var(--text-color);
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.add-group-form button:hover {
-  background-color: #0056b3;
+#add-group-button:hover {
+  background-color: var(--button-hover-bg-color);
 }
 
-/* Group list styling */
-.group-list {
+/* Group List Grid Layout */
+#group-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
-/* Style for each individual group card */
+/* Group Card with Fixed Dimensions */
 .group-card {
-  text-decoration: none;
-  background-color: white;
-  padding: 20px;
+  background-color: var(--light-color);
+  padding: 15px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
+  max-width: 350px;  /* Ensuring all cards have a consistent width */
+  height: 400px;     /* Fixed height for all cards */
 }
 
 .group-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+/* Ensuring the image fills the card and maintains aspect ratio */
 .group-image {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-bottom: 15px;
-  border: 3px solid #007bff;
+  width: 100%;
+  height: 250px;    /* Fixed height for the image */
+  object-fit: cover; /* Makes sure the image fills the area while maintaining aspect ratio */
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
 .group-name {
-  font-size: 1.2em;
-  color: #333;
+  font-size: 1.2rem;
   font-weight: bold;
+  color: var(--dark-color);
+  margin-bottom: 10px;
+}
+
+/* Group Actions (Edit and Delete Buttons) */
+.group-actions {
+  display: flex;
+  justify-content: space-around;
   margin-top: 10px;
 }
 
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .group-container {
-    width: 95%;
-  }
+.group-edit-button,
+.group-delete-button {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  background-color: var(--button-bg-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-  .group-list {
+.group-edit-button:hover,
+.group-delete-button:hover {
+  background-color: var(--button-hover-bg-color);
+}
+
+/* Edit Group Form */
+.edit-group-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: var(--light-color);
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.edit-group-name-input,
+.edit-group-image-input {
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+}
+
+.update-group-button {
+  padding: 10px;
+  font-size: 1rem;
+  background-color: var(--button-bg-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.update-group-button:hover {
+  background-color: var(--button-hover-bg-color);
+}
+
+/* Links Styling */
+a {
+  text-decoration: none;
+  color: var(--main-color);
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--button-hover-bg-color);
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  #group-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  #group-list {
     grid-template-columns: 1fr;
   }
 
-  .group-card {
-    padding: 15px;
+  #add-group-form {
+    flex-direction: column;
   }
 
-  .group-image {
-    width: 120px;
-    height: 120px;
+  .group-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  #page-title {
+    font-size: 1.8rem;
   }
 
-  .add-group-form button {
-    font-size: 16px;
+  #group-name-input,
+  #group-image-input,
+  #add-group-button,
+  .edit-group-name-input,
+  .edit-group-image-input,
+  .update-group-button {
+    font-size: 0.9rem;
+    padding: 8px;
   }
 }

@@ -1,177 +1,208 @@
-/* classDetail.css */
+/* General styling for the container */
 .class-detail-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f4f4f9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
   border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
   font-size: 2.5rem;
-  text-align: center;
   color: #333;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #007bff;
-  padding-bottom: 10px;
-}
-
-p {
-  font-size: 1.2rem;
+  margin-bottom: 10px;
   text-align: center;
-  margin-bottom: 30px;
-  color: #555;
 }
 
 h3 {
-  font-size: 2rem;
-  margin-bottom: 15px;
-  color: #007bff;
+  font-size: 1.5rem;
+  color: #555;
+  margin-top: 30px;
+  margin-bottom: 20px;
 }
 
-.student-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  list-style: none;
-  padding: 0;
-  margin-bottom: 30px;
-}
-
-.student-card {
-  background-color: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 15px;
-}
-
-.student-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.student-photo {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #007bff;
-  margin-bottom: 15px;
-}
-
-.student-info {
+p {
+  color: #666;
+  line-height: 1.6;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
   text-align: center;
 }
 
-.student-info h4 {
-  font-size: 1.5rem;
-  margin: 0;
-  color: #333;
+/* Group / Champion Image Display */
+.image-display {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.student-info p {
-  font-size: 1.1rem;
-  color: #666;
+.group-image, .champion-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #333;
+  margin-top: 10px;
 }
 
-/* Add and update form styles */
+/* Champion of Champions Section */
+.champion-display {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.champion-display h3 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.champion-display img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 3px solid #444;
+}
+
+/* Form styling */
 form {
-  margin-top: 20px;
+  margin-bottom: 20px;
   background-color: #fff;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-form h4 {
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-  color: #333;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 form input, form textarea {
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 5px;
+  margin: 10px 0;
   border: 1px solid #ddd;
+  border-radius: 5px;
   font-size: 1rem;
-  color: #333;
-}
-
-form textarea {
-  height: 100px;
-  resize: none;
 }
 
 form button {
-  background-color: #007bff;
-  color: #fff;
+  background-color: #28a745;
+  color: white;
+  padding: 10px 15px;
   border: none;
-  padding: 10px 20px;
-  font-size: 1rem;
   border-radius: 5px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 form button:hover {
-  background-color: #0056b3;
+  background-color: #218838;
 }
 
-/* Action buttons for students (edit/remove) */
-.group-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
+/* Championship Controls */
+.championship-controls {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-.group-actions button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  font-size: 0.9rem;
+.championship-controls input {
+  width: 70%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
 }
 
-.group-actions button:hover {
+.championship-controls button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+.championship-controls button:hover {
   background-color: #0056b3;
 }
 
-.group-actions .remove {
-  background-color: #dc3545;
+/* Student Table */
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
 }
 
-.group-actions .remove:hover {
-  background-color: #c82333;
+.student-table th, .student-table td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  text-align: center;
 }
 
-/* Responsive Design */
+.student-table th {
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.student-table td {
+  background-color: #fff;
+}
+
+.student-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Student Photo in Table */
+.student-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #333;
+}
+
+/* Points Control Buttons */
+.points-control button {
+  background-color: #ffc107;
+  color: white;
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.points-control button:hover {
+  background-color: #e0a800;
+}
+
+/* Responsive Styles */
 @media (max-width: 768px) {
-  .student-card {
-    padding: 20px;
+  .championship-controls input {
+    width: 100%;
+  }
+
+  .student-table th, .student-table td {
+    padding: 10px;
   }
 
   .student-photo {
-    width: 80px;
-    height: 80px;
+    width: 40px;
+    height: 40px;
   }
 
-  .student-info h4 {
-    font-size: 1.3rem;
+  .champion-photo, .group-image {
+    width: 100px;
+    height: 100px;
   }
 
-  .student-info p {
-    font-size: 1rem;
+  .champion-display img {
+    width: 100px;
+    height: 100px;
   }
 }
-

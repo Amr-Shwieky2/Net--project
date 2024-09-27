@@ -1,78 +1,134 @@
+/* Container for authentication page */
 .auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   background-color: #f0f0f0;
+  padding: 20px; /* Added padding to ensure spacing on smaller screens */
 }
 
+/* Form styling for login and registration */
 .auth-form {
   background-color: #fff;
   padding: 40px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  width: 100%;
+  max-width: 400px; /* Max-width for larger screens */
   text-align: center;
 }
 
-.auth-form h2 {
+.auth-form-heading {
   margin-bottom: 20px;
   font-size: 24px;
-  color: #333;
+  color: #880194; /* Your preferred primary color */
 }
 
+/* Form group for inputs */
 .form-group {
   margin-bottom: 20px;
 }
 
-.form-group label {
+.form-label {
   display: block;
   font-size: 14px;
   margin-bottom: 5px;
   color: #666;
 }
 
-.form-group input {
+.form-input {
   width: 100%;
   padding: 10px;
   border-radius: 4px;
   border: 1px solid #ccc;
   font-size: 16px;
+  box-sizing: border-box; /* Ensure input fields respect padding */
 }
 
-button {
-  width: 100%;
-  padding: 10px;
+/* Button styling */
+.auth-button {
+  width: 100%; /* Ensure the button matches the width of the inputs */
+  padding: 12px; /* Slightly larger padding for consistency */
   border: none;
-  background-color: #007bff;
+  background-color: #880194; /* Your preferred primary color */
   color: white;
   font-size: 16px;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s;
+  box-sizing: border-box; /* Ensure button respects padding */
 }
 
-button:hover {
-  background-color: #0056b3;
+.auth-button:hover {
+  background-color: #660173; /* Darker shade for hover */
 }
 
+/* Toggle text (Login/Register switch) */
 .toggle-text {
   margin-top: 20px;
   font-size: 14px;
   color: #666;
 }
 
-.toggle-text span {
-  color: #007bff;
+.toggle-link {
+  color: #880194; /* Your preferred primary color */
   cursor: pointer;
   margin-left: 5px;
 }
 
-.toggle-text span:hover {
+.toggle-link:hover {
   text-decoration: underline;
 }
 
+/* Error text for form validation */
 .error-text {
   color: red;
   font-size: 14px;
   margin-bottom: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .auth-form {
+    padding: 30px;
+    width: 100%;
+    max-width: 90%; /* Make the form almost full-width on smaller screens */
+  }
+
+  .auth-form-heading {
+    font-size: 20px; /* Slightly smaller for mobile screens */
+  }
+
+  .auth-button {
+    padding: 12px; /* Slightly bigger buttons for touch screens */
+  }
+
+  .form-input {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-form {
+    padding: 20px;
+    width: 100%;
+    max-width: 100%; /* Full width for smaller devices */
+  }
+
+  .auth-form-heading {
+    font-size: 18px; /* Smaller heading for mobile */
+  }
+
+  .form-group {
+    margin-bottom: 15px; /* Less spacing between form fields */
+  }
+
+  .form-input {
+    padding: 8px; /* Smaller padding for input fields on smaller screens */
+  }
+
+  .auth-button {
+    font-size: 14px; /* Slightly smaller button text */
+  }
 }

@@ -1,47 +1,122 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Auth context for checking login status
-import useClassDetail from '../hooks/useClassDetail'; // Custom hook
-import './style/groupDetail.css'; // Add your styles
+import { useParams } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import useClassDetail from '../hooks/useClassDetail';
+import './style/groupDetail.css'; // Assuming you have a stylesheet for the component
 
 const ClassDetailPage = () => {
   const { id } = useParams(); // Get the group ID from the URL
-  const { user } = useAuth(); // Check if user is logged in
+  const { user } = useAuth(); // Assuming you have an AuthContext that provides user info
   const {
     groupData,
     loading,
     groupInfo,
     setGroupInfo,
-    selectedStudent,
-    setSelectedStudent,
+    handleUpdateGroupInfo,
+    handleUpdateStudentPoints,
+    toggleChampionship,
+    championshipOpen,
+    championshipName,
+    setChampionshipName,
     handleAddStudent,
     handleRemoveStudent,
-    handleUpdateGroupInfo,
-    handleUpdateStudent
+    currentChampion,
+    calculateChampionOfChampions,
+    championOfChampions,
   } = useClassDetail(id);
 
-  const [newStudent, setNewStudent] = useState({ name: '', photoFile: null, marks: '' });
+  const [newStudent, setNewStudent] = useState({ name: '', photoFile: null, birthday: '', marks: 0 });
+  const [uploading, setUploading] = useState(false);
 
   if (loading) {
-    return <div>Loading...</div>; // Show loading spinner while data is being fetched
+    return <div>Loading...</div>;
   }
 
   if (!groupData) {
-    return <div>Group not found!</div>; // Show message if no group data is found
+    return <div>Group not found!</div>;
   }
+
+  // Handle form input for new students
+  const handleNewStudentChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === 'photoFile') {
+      setNewStudent({ ...newStudent, photoFile: files[0] });
+    } else {
+      setNewStudent({ ...newStudent, [name]: value });
+    }
+  };
+
+  // Form submission to add a new student
+  const handleNewStudentSubmit = async (e) => {
+    e.preventDefault();
+    if (!newStudent.photoFile) {
+      alert('Please select a photo for the student');
+      return;
+    }
+
+    setUploading(true); // Set uploading state
+
+    try {
+      // Add the student with the photo file and birthday
+      await handleAddStudent(newStudent);
+      setNewStudent({ name: '', photoFile: null, birthday: '', marks: 0 });
+      alert('Student added successfully!');
+    } catch (error) {
+      console.error('Error adding student:', error);
+      alert('Failed to add student.');
+    } finally {
+      setUploading(false); // Reset uploading state
+    }
+  };
 
   return (
     <div className="class-detail-container">
+      {/* Group Title and Description */}
       <h1>{groupData.name}</h1>
       <p>{groupData.description}</p>
 
-      {/* Show form for updating group name and description if logged in */}
+      {/* Display the group image if there is no champion, or the champion's image if there is one */}
+      <div className="image-display">
+        {currentChampion ? (
+          <div className="champion-display">
+            <h3>Last Champion: {currentChampion}</h3>
+            {groupData.students
+              .filter((student) => student.name === currentChampion)
+              .map((champion) => (
+                <img
+                  key={champion.name}
+                  src={champion.photo}
+                  alt={champion.name}
+                  className="champion-photo"
+                />
+              ))}
+          </div>
+        ) : (
+          <img src={groupInfo.image} alt={groupData.name} className="group-image" />
+        )}
+      </div>
+
+      {/* Champion of Champions Display */}
+      {championOfChampions && (
+        <div className="champion-display">
+          <h3>Champion of Champions: {championOfChampions.name}</h3>
+          <img
+            src={championOfChampions.photo}
+            alt={championOfChampions.name}
+            className="champion-photo"
+          />
+        </div>
+      )}
+
+      {/* Group Info Form for logged in users */}
       {user && (
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          handleUpdateGroupInfo(groupInfo);
-        }}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleUpdateGroupInfo(groupInfo); // Update group info (name, description)
+          }}
+        >
           <input
             type="text"
             value={groupInfo.name}
@@ -59,92 +134,111 @@ const ClassDetailPage = () => {
         </form>
       )}
 
+      {/* Championship Controls for authenticated users */}
       {user && (
-        <Link to={`/group/${id}/register`} className="register-link">
-            Share this link with your students to register
-        </Link>
-      )}
-
-      <h3>Students:</h3>
-      <ul className="student-list">
-        {groupData.students && groupData.students.map((student, index) => (
-          <li key={index} className="student-card">
-            <img src={student.photo} alt={student.name} className="student-photo" />
-            <div className="student-info">
-              <h4>{student.name}</h4>
-              <p>Evaluation: {student.marks}</p>
-            </div>
-
-            {/* Show edit and delete options if logged in */}
-            {user && (
-              <div>
-                <button onClick={() => handleRemoveStudent(student)}>Remove Student</button>
-                <button onClick={() => setSelectedStudent(student)}>Edit Student</button>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
-
-      {/* Form for adding new students (only if logged in) */}
-      {user && (
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          handleAddStudent(newStudent);
-        }}>
-          <h4>Add Student</h4>
+        <div className="championship-controls">
           <input
             type="text"
+            value={championshipName}
+            onChange={(e) => setChampionshipName(e.target.value)}
+            placeholder="Championship Name"
+            required
+            disabled={championshipOpen} // Disable input if championship is already open
+          />
+          <button onClick={toggleChampionship}>
+            {championshipOpen ? 'Close Championship' : 'Open Championship'}
+          </button>
+          <button onClick={calculateChampionOfChampions}>Calculate Champion of Champions</button>
+
+          {/* Display the current champion when the championship ends */}
+          {currentChampion && (
+            <div>
+              <h3>Champion: {currentChampion}</h3>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Student List displayed as a table */}
+      <h3>Students</h3>
+      <table className="student-table">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Current Points</th>
+            <th>Total Points</th>
+            {user && <th>Actions</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {groupData.students.map((student) => (
+            <tr key={student.name}>
+              <td>
+                <img src={student.photo} alt={student.name} className="student-photo" />
+              </td>
+              <td>{student.name}</td>
+              <td>{student.marks}</td>
+              <td>{student.totalPoints || 0}</td>
+              {user && (
+                <td>
+                  {/* Points control for authenticated users during an active championship */}
+                  {championshipOpen && (
+                    <div className="points-control">
+                      <button onClick={() => handleUpdateStudentPoints(student, student.marks + 1)}>
+                        +1 Point
+                      </button>
+                      <button onClick={() => handleUpdateStudentPoints(student, student.marks - 1)}>
+                        -1 Point
+                      </button>
+                    </div>
+                  )}
+                  <button onClick={() => handleRemoveStudent(student)}>Remove</button>
+                </td>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Form to add a new student */}
+      {user && (
+        <form onSubmit={handleNewStudentSubmit}>
+          <h4>Add New Student</h4>
+          <input
+            type="text"
+            name="name"
             value={newStudent.name}
-            onChange={(e) => setNewStudent({ ...newStudent, name: e.target.value })}
+            onChange={handleNewStudentChange}
             placeholder="Student Name"
             required
           />
           <input
             type="file"
-            onChange={(e) => setNewStudent({ ...newStudent, photoFile: e.target.files[0] })}
+            name="photoFile"
+            accept="image/*"
+            onChange={handleNewStudentChange}
+            required
+          />
+          <input
+            type="date"
+            name="birthday"
+            value={newStudent.birthday}
+            onChange={handleNewStudentChange}
+            placeholder="Student Birthday"
             required
           />
           <input
             type="number"
+            name="marks"
             value={newStudent.marks}
-            onChange={(e) => setNewStudent({ ...newStudent, marks: e.target.value })}
-            placeholder="Marks"
+            onChange={handleNewStudentChange}
+            placeholder="Initial Points"
             required
           />
-          <button type="submit">Add Student</button>
-        </form>
-      )}
-
-      {/* Form for updating selected student info */}
-      {selectedStudent && (
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          handleUpdateStudent(selectedStudent);
-        }}>
-          <h4>Update Student Info</h4>
-          <input
-            type="text"
-            value={selectedStudent.name}
-            onChange={(e) => setSelectedStudent({ ...selectedStudent, name: e.target.value })}
-            placeholder="Student Name"
-            required
-          />
-          <input
-            type="text"
-            value={selectedStudent.photo}
-            onChange={(e) => setSelectedStudent({ ...selectedStudent, photo: e.target.value })}
-            placeholder="Photo URL"
-            required
-          />
-          <input
-            type="number"
-            value={selectedStudent.marks}
-            onChange={(e) => setSelectedStudent({ ...selectedStudent, marks: e.target.value })}
-            placeholder="Marks"
-            required
-          />
-          <button type="submit">Update Student</button>
+          <button type="submit" disabled={uploading}>
+            {uploading ? 'Uploading...' : 'Add Student'}
+          </button>
         </form>
       )}
     </div>

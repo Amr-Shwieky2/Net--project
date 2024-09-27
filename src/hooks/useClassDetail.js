@@ -1,28 +1,38 @@
-// src/hooks/useClassDetail.js
-
 import { useEffect, useState } from 'react';
-import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../config/firebase-config'; // Firestore and Storage
+import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { db, storage } from '../config/firebase-config'; // Added storage for Firebase
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import Firebase storage methods
 
 const useClassDetail = (groupId) => {
   const [groupData, setGroupData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [groupInfo, setGroupInfo] = useState({ name: '', description: '' });
-  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [groupInfo, setGroupInfo] = useState({ name: '', description: '', image: '' });
+  const [championshipOpen, setChampionshipOpen] = useState(false);
+  const [currentChampion, setCurrentChampion] = useState(null);
+  const [championshipName, setChampionshipName] = useState('');
+  const [championOfChampions, setChampionOfChampions] = useState(null); // Champion of Champions
 
-  // Fetch the group details from Firestore based on the group ID
+  // Fetch group data from Firestore
   useEffect(() => {
     const fetchGroup = async () => {
+      setLoading(true);
       try {
-        const groupRef = doc(db, 'groups', groupId); // Reference to the group document
-        const groupSnap = await getDoc(groupRef); // Fetch the group document
+        const groupRef = doc(db, 'groups', groupId);
+        const groupSnap = await getDoc(groupRef);
         if (groupSnap.exists()) {
           const data = groupSnap.data();
           setGroupData(data);
-          setGroupInfo({ name: data.name, description: data.description });
+          setGroupInfo({ name: data.name, description: data.description, image: data.image });
+          setChampionshipOpen(data.currentChampionship?.isOpen || false);
+          setChampionshipName(data.currentChampionship?.name || '');
+
+          // Set the most recent champion (if exists)
+          if (data.championships && data.championships.length > 0) {
+            const lastChampionship = data.championships[data.championships.length - 1];
+            setCurrentChampion(lastChampionship.champion);
+          }
         } else {
-          console.log('No such document!');
+          console.error('No such document!');
         }
       } catch (error) {
         console.error('Error fetching group data:', error);
@@ -34,78 +44,129 @@ const useClassDetail = (groupId) => {
     fetchGroup();
   }, [groupId]);
 
-  // Handle adding a new student
-  const handleAddStudent = async (newStudent) => {
-    const groupRef = doc(db, 'groups', groupId); // Reference to the group document
-
-    if (newStudent.photoFile) {
-      // Upload photo to Firebase Storage
-      const storageRef = ref(storage, `students/${newStudent.photoFile.name}`);
-      await uploadBytes(storageRef, newStudent.photoFile);
-      const photoURL = await getDownloadURL(storageRef);
-
-      // Add new student to Firestore with the photo URL
-      const studentToAdd = {
-        name: newStudent.name,
-        photo: photoURL, // Store the download URL
-        marks: newStudent.marks
-      };
-
-      await updateDoc(groupRef, {
-        students: arrayUnion(studentToAdd) // Add the new student to the students array
-      });
-
-      // Update local state
-      setGroupData({ ...groupData, students: [...groupData.students, studentToAdd] });
+  // Helper function to update Firestore and local state
+  const updateGroupState = async (updates) => {
+    const groupRef = doc(db, 'groups', groupId);
+    try {
+      await updateDoc(groupRef, updates);
+      setGroupData({ ...groupData, ...updates });
+    } catch (error) {
+      console.error('Error updating Firestore:', error);
     }
   };
 
-  // Handle removing a student
-  const handleRemoveStudent = async (student) => {
-    const groupRef = doc(db, 'groups', groupId);
-
-    // Remove the student from Firestore
-    await updateDoc(groupRef, {
-      students: arrayRemove(student)
-    });
-
-    // Update local state
-    setGroupData({
-      ...groupData,
-      students: groupData.students.filter((s) => s.name !== student.name)
-    });
+  // Function to upload student photos to Firebase Storage
+  const uploadPhoto = async (file) => {
+    if (!file) return null;
+    const storageRef = ref(storage, `students/${file.name}`);
+    await uploadBytes(storageRef, file);
+    return await getDownloadURL(storageRef); // Get the image URL after upload
   };
 
-  // Handle updating group info (name, description)
-  const handleUpdateGroupInfo = async (groupInfo) => {
-    const groupRef = doc(db, 'groups', groupId);
+  // Add new student with photo and birthday to Firestore
+  const handleAddStudent = async (newStudent) => {
+    if (!newStudent.photoFile) {
+      throw new Error('No photo file provided');
+    }
 
-    // Update group info in Firestore
+    // Upload the photo and get the URL
+    const photoURL = await uploadPhoto(newStudent.photoFile);
+
+    const studentData = {
+      name: newStudent.name,
+      photo: photoURL,
+      marks: newStudent.marks,
+      birthday: newStudent.birthday, // Store the birthday in Firestore
+    };
+
+    // Add student to Firestore
+    const groupRef = doc(db, 'groups', groupId);
     await updateDoc(groupRef, {
-      name: groupInfo.name,
-      description: groupInfo.description
+      students: arrayUnion(studentData),
     });
 
-    // Update local state
-    setGroupData({ ...groupData, name: groupInfo.name, description: groupInfo.description });
+    // Update local state with the new student
+    setGroupData((prevData) => ({
+      ...prevData,
+      students: [...prevData.students, studentData],
+    }));
   };
 
-  // Handle updating student info
-  const handleUpdateStudent = async (updatedStudent) => {
-    const updatedStudents = groupData.students.map((student) =>
-      student.name === selectedStudent.name ? updatedStudent : student
+  // Handle updating student points during an active championship
+  const handleUpdateStudentPoints = async (student, newPoints) => {
+    const updatedStudents = groupData.students.map((s) =>
+      s.name === student.name ? { ...s, marks: newPoints } : s
     );
 
-    const groupRef = doc(db, 'groups', groupId);
+    await updateGroupState({ students: updatedStudents });
+  };
 
-    // Update students array in Firestore
-    await updateDoc(groupRef, {
-      students: updatedStudents
+  // Open or close the championship
+  const toggleChampionship = async () => {
+    if (championshipOpen) {
+      // Close the championship and calculate the winner
+      const topStudent = groupData.students.reduce((prev, current) =>
+        prev.marks > current.marks ? prev : current
+      );
+
+      // Update total points for all students based on their performance
+      const updatedStudents = groupData.students.map((student) => ({
+        ...student,
+        totalPoints: (student.totalPoints || 0) + student.marks,
+        marks: 0, // Reset current championship points after it ends
+      }));
+
+      await updateGroupState({
+        championships: arrayUnion({
+          championshipName: championshipName,
+          champion: topStudent.name,
+          participants: updatedStudents.map((student) => ({
+            name: student.name,
+            points: student.totalPoints,
+          })),
+        }),
+        students: updatedStudents,
+        'currentChampionship.isOpen': false,
+        'currentChampionship.name': '',
+      });
+
+      setCurrentChampion(topStudent.name);
+      setChampionshipOpen(false);
+      setChampionshipName(''); // Clear the championship name
+    } else {
+      // Open a new championship with the given name
+      await updateGroupState({
+        'currentChampionship.isOpen': true,
+        'currentChampionship.name': championshipName,
+      });
+
+      setChampionshipOpen(true);
+    }
+  };
+
+  // Calculate and set the Champion of Champions based on total points
+  const calculateChampionOfChampions = () => {
+    const champion = groupData.students.reduce((prev, current) =>
+      (prev.totalPoints || 0) > (current.totalPoints || 0) ? prev : current
+    );
+
+    setChampionOfChampions(champion); // Set the Champion of Champions
+  };
+
+  // Update group info
+  const handleUpdateGroupInfo = async (groupInfo) => {
+    await updateGroupState({
+      name: groupInfo.name,
+      description: groupInfo.description,
     });
+  };
 
-    // Update local state
-    setGroupData({ ...groupData, students: updatedStudents });
-    setSelectedStudent(null); // Clear selected student for updating
+  // Remove a student
+  const handleRemoveStudent = async (studentToRemove) => {
+    const updatedStudents = groupData.students.filter(
+      (student) => student.name !== studentToRemove.name
+    );
+    await updateGroupState({ students: updatedStudents });
   };
 
   return {
@@ -113,12 +174,17 @@ const useClassDetail = (groupId) => {
     loading,
     groupInfo,
     setGroupInfo,
-    selectedStudent,
-    setSelectedStudent,
+    handleUpdateGroupInfo,
+    handleUpdateStudentPoints,
+    toggleChampionship,
+    championshipOpen,
+    championshipName,
+    setChampionshipName,
     handleAddStudent,
     handleRemoveStudent,
-    handleUpdateGroupInfo,
-    handleUpdateStudent
+    currentChampion, // This will contain the name of the last champion
+    calculateChampionOfChampions, // Function to calculate the Champion of Champions
+    championOfChampions, // This will contain the name of the Champion of Champions
   };
 };
 

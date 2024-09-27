@@ -59,24 +59,26 @@ const LoginRegister = () => {
   return (
     <div className="auth-container">
       <div className="auth-form">
-        <h2>{isLogin ? 'Login' : 'Register'}</h2>
-        {error && <p className="error-text">{error}</p>} {/* Show errors */}
+        <h2 className="auth-form-heading">{isLogin ? 'Login' : 'Register'}</h2>
+        {error && <p className="error-text">{error}</p>} {/* Display error messages */}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Email</label>
+            <label className="form-label">Email</label>
             <input
               type="email"
               name="email"
+              className="form-input"
               value={formData.email}
               onChange={handleChange}
               required
             />
           </div>
           <div className="form-group">
-            <label>Password</label>
+            <label className="form-label">Password</label>
             <input
               type="password"
               name="password"
+              className="form-input"
               value={formData.password}
               onChange={handleChange}
               required
@@ -84,21 +86,24 @@ const LoginRegister = () => {
           </div>
           {!isLogin && (
             <div className="form-group">
-              <label>Confirm Password</label>
+              <label className="form-label">Confirm Password</label>
               <input
                 type="password"
                 name="confirmPassword"
+                className="form-input"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
               />
             </div>
           )}
-          <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
+          <button type="submit" className="auth-button">
+            {isLogin ? 'Login' : 'Register'}
+          </button>
         </form>
         <p className="toggle-text">
           {isLogin ? "Don't have an account?" : 'Already have an account?'}
-          <span onClick={handleToggle}>
+          <span className="toggle-link" onClick={handleToggle}>
             {isLogin ? ' Register' : ' Login'}
           </span>
         </p>
