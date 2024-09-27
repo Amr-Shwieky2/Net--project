@@ -41,23 +41,29 @@ const useGroups = () => {
   };
 
   // Handle adding a new group
-  const handleAddGroup = async (e) => {
-    e.preventDefault();
+const handleAddGroup = async (e) => {
+  e.preventDefault();
 
-    // Upload image to Firebase Storage
-    const imageRef = ref(storage, `groups/${newGroup.imageFile.name}`);
-    await uploadBytes(imageRef, newGroup.imageFile); // Upload the file
-    const imageUrl = await getDownloadURL(imageRef); // Get the image URL after upload
+  // Upload image to Firebase Storage
+  const imageRef = ref(storage, `groups/${newGroup.imageFile.name}`);
+  await uploadBytes(imageRef, newGroup.imageFile); // Upload the file
+  const imageUrl = await getDownloadURL(imageRef); // Get the image URL after upload
 
-    // Add group to Firestore with the image URL
-    const newGroupData = {
-      name: newGroup.name,
-      image: imageUrl,
-    };
-    await addDoc(collection(db, 'groups'), newGroupData);
-    setGroups([...groups, { id: Date.now(), ...newGroupData }]); // Update local state
-    setNewGroup({ name: '', imageFile: null }); // Clear the form
+  // Add group to Firestore with additional fields
+  const newGroupData = {
+    name: newGroup.name,
+    image: imageUrl,
+    description: 'A new group', // Default description or make it dynamic
+    championships: [{champion:"", championshipName:""}], // Empty array for future championships
+    currentChampionship: {isOpen:true, name:""}, // Empty object or set to default values
+    students: [{name:"", marks:0, photo:""}], // Empty array for students
   };
+
+  await addDoc(collection(db, 'groups'), newGroupData);
+  setGroups([...groups, { id: Date.now(), ...newGroupData }]); // Update local state
+  setNewGroup({ name: '', imageFile: null }); // Clear the form
+};
+
 
   // Handle delete group
   const handleDeleteGroup = async (groupId) => {

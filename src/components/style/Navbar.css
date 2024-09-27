@@ -9,9 +9,17 @@
 }
 
 .navbar-logo a {
+  display: flex;
+  align-items: center;
   font-size: 24px;
   color: white;
   text-decoration: none;
+}
+
+.navbar-logo img {
+  width: 120px; /* Adjust size of the logo */
+  height: auto;
+  margin-right: 10px;
 }
 
 .navbar-links {
@@ -48,6 +56,10 @@
       margin-bottom: 10px;
   }
 
+  .navbar-logo img {
+      width: 100px; /* Smaller logo for mobile */
+  }
+
   .navbar-button {
       font-size: 14px;
       padding: 6px 12px;
@@ -64,6 +76,10 @@
       font-size: 22px;
   }
 
+  .navbar-logo img {
+      width: 110px;
+  }
+
   .navbar-button {
       font-size: 15px;
       padding: 8px 14px;
@@ -78,6 +94,10 @@
 
   .navbar-logo a {
       font-size: 26px;
+  }
+
+  .navbar-logo img {
+      width: 130px; /* Larger logo for desktops */
   }
 
   .navbar-button {

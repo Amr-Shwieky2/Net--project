@@ -14,7 +14,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <Link to="/">MyAppLogo</Link>
+        <Link to="/"><img src="logo-neta.png" alt="logo" /></Link>
       </div>
       <div className="navbar-links">
         {user ? (
