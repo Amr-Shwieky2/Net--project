@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import useClassDetail from '../hooks/useClassDetail';
-import './style/groupDetail.css'; // Assuming you have a stylesheet for the component
+import './style/groupdetail.css'; // Assuming you have a stylesheet for the component
 
 const ClassDetailPage = () => {
   const { id } = useParams(); // Get the group ID from the URL
