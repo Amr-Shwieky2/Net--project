@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx'; // Use the custom hook to access auth state
-import "./style/Navbar.css"
+import "./style/Navbar.css";
 
 const Navbar = () => {
   const { user, logout } = useAuth(); // Access user and logout from context
@@ -14,11 +14,24 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <Link to="/"><img src="logo-neta.png" alt="logo" /></Link>
+        <Link to="/">
+          <img src="logo-neta.png" alt="logo" />
+        </Link>
       </div>
+
       <div className="navbar-links">
+        <Link to="/about" className="navbar-button">
+          About Us
+        </Link>
+        <Link to="/contact" className="navbar-button">
+          Contact Us
+        </Link>
+        <Link to="/privacy" className="navbar-button">
+          Privacy Policy
+        </Link>
+
         {user ? (
-          // Show "Logout" if user is logged in
+          // Show "Logout" if the user is logged in
           <button className="navbar-button" onClick={handleLogout}>
             Logout
           </button>

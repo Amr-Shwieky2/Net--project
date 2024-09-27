@@ -1,4 +1,4 @@
-/* Styles for Navbar */
+/* Navbar Styles */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -8,18 +8,8 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.navbar-logo a {
-  display: flex;
-  align-items: center;
-  font-size: 24px;
-  color: white;
-  text-decoration: none;
-}
-
 .navbar-logo img {
-  width: 120px; /* Adjust size of the logo */
-  height: auto;
-  margin-right: 10px;
+  height: 50px;
 }
 
 .navbar-links {
@@ -29,8 +19,9 @@
 
 .navbar-button {
   padding: 8px 16px;
+  margin-left: 15px;
   background-color: white;
-  color: #9e02ac;
+  color: #880194;
   text-decoration: none;
   border-radius: 4px;
   font-size: 16px;
@@ -38,69 +29,48 @@
 }
 
 .navbar-button:hover {
-  background-color:#9e02ac;
+  background-color: #9e02ac;
   color: white;
 }
 
-/* Media Queries for Responsiveness */
-
-/* Mobile Phones */
+/* Hide only the extra buttons (About Us, Contact Us, Privacy Policy) on small screens (phones) */
 @media (max-width: 600px) {
-  .navbar {
-      flex-direction: column;
-      align-items: flex-start;
-  }
-
-  .navbar-logo a {
-      font-size: 20px;
-      margin-bottom: 10px;
+  .navbar-links .navbar-button:not(:last-child) {
+    display: none; /* Hide all buttons except the last one (Login/Logout) */
   }
 
   .navbar-logo img {
-      width: 100px; /* Smaller logo for mobile */
-  }
-
-  .navbar-button {
-      font-size: 14px;
-      padding: 6px 12px;
+    height: 45px; /* Adjust logo size for smaller screens */
   }
 }
 
 /* Tablets */
 @media (min-width: 601px) and (max-width: 1024px) {
   .navbar {
-      padding: 10px 15px;
-  }
-
-  .navbar-logo a {
-      font-size: 22px;
+    padding: 10px 15px;
   }
 
   .navbar-logo img {
-      width: 110px;
+    height: 45px;
   }
 
   .navbar-button {
-      font-size: 15px;
-      padding: 8px 14px;
+    font-size: 15px;
+    padding: 8px 14px;
   }
 }
 
 /* Desktops */
 @media (min-width: 1025px) {
   .navbar {
-      padding: 10px 30px;
-  }
-
-  .navbar-logo a {
-      font-size: 26px;
+    padding: 10px 30px;
   }
 
   .navbar-logo img {
-      width: 130px; /* Larger logo for desktops */
+    height: 50px;
   }
 
   .navbar-button {
-      font-size: 16px;
+    font-size: 16px;
   }
 }
