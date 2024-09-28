@@ -1,13 +1,13 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import useClassDetail from '../hooks/useClassDetail';
-import './style/groupdetail.css'; // Assuming you have a CSS file for styling
+import { useAuth } from '../context/AuthContext'; // Import the authentication context
+import useClassDetail from '../hooks/useClassDetail'; // Import the custom hook for group data
+import './style/groupdetail.css'; // Import the CSS file for styling
 
 const ClassDetailPage = () => {
-  const { id } = useParams(); // Get the group ID from the URL
-  const { user } = useAuth(); // Get user data from the authentication context
+  const { id } = useParams(); // Retrieve the group ID from the URL
+  const { user } = useAuth(); // Get the authenticated user details from context
   const {
     groupData,
     loading,
@@ -24,45 +24,43 @@ const ClassDetailPage = () => {
     currentChampion,
     calculateChampionOfChampions,
     championOfChampions,
-  } = useClassDetail(id);
-
-  const [showLink, setShowLink] = useState(false); // State to toggle visibility of the registration link
-  const [newStudent, setNewStudent] = useState({ name: '', photoFile: null, birthday: '', marks: 0 });
-  const [uploading, setUploading] = useState(false);
+    showLink,
+    setShowLink,
+    registrationURL,
+    showChampionships,
+    toggleShowChampionships,
+    newStudent,
+    setNewStudent,
+    uploading,
+    setUploading,
+  } = useClassDetail(id); // Custom hook for handling group data and states
 
   if (loading) {
     return <div>Loading...</div>; // Show loading spinner while data is being fetched
   }
 
   if (!groupData) {
-    return <div>Group not found!</div>; // Show message if the group data doesn't exist
+    return <div>Group not found!</div>; // Display message if group data is not found
   }
 
-  // Generate the correct registration URL for students using the group ID
-  const registrationURL = `${window.location.origin}/group/${id}/register`;
-
-  // Handle form input for new students
+  // Handle form input changes for adding new students
   const handleNewStudentChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'photoFile') {
-      setNewStudent({ ...newStudent, photoFile: files[0] });
-    } else {
-      setNewStudent({ ...newStudent, [name]: value });
-    }
+    setNewStudent((prev) => ({
+      ...prev,
+      [name]: files ? files[0] : value,
+    }));
   };
 
-  // Form submission to add a new student
+  // Handle form submission to add a new student
   const handleNewStudentSubmit = async (e) => {
     e.preventDefault();
     if (!newStudent.photoFile) {
       alert('Please select a photo for the student');
       return;
     }
-
-    setUploading(true); // Set uploading state
-
+    setUploading(true);
     try {
-      // Add the student with the photo file and birthday
       await handleAddStudent(newStudent);
       setNewStudent({ name: '', photoFile: null, birthday: '', marks: 0 });
       alert('Student added successfully!');
@@ -70,7 +68,7 @@ const ClassDetailPage = () => {
       console.error('Error adding student:', error);
       alert('Failed to add student.');
     } finally {
-      setUploading(false); // Reset uploading state
+      setUploading(false);
     }
   };
 
@@ -80,11 +78,11 @@ const ClassDetailPage = () => {
       <h1>{groupData.name}</h1>
       <p>{groupData.description}</p>
 
-      {/* Display the group image if there is no champion, or the champion's image if there is one */}
+      {/* Display the group image or champion's image if present */}
       <div className="image-display">
         {currentChampion ? (
           <div className="champion-display">
-            <h3>Last Champion: {currentChampion}</h3>
+            <h3>Student of the month: {currentChampion}</h3>
             {groupData.students
               .filter((student) => student.name === currentChampion)
               .map((champion) => (
@@ -101,20 +99,25 @@ const ClassDetailPage = () => {
         )}
       </div>
 
-      {/* Champion of Champions Display */}
+      {/* Display Champion of Champions if available */}
       {championOfChampions && (
         <div className="champion-display">
           <h3>Champion of Champions: {championOfChampions.name}</h3>
-          <img src={championOfChampions.photo} alt={championOfChampions.name} className="champion-photo" />
+          <img
+            src={championOfChampions.photo}
+            alt={championOfChampions.name}
+            className="champion-photo"
+          />
         </div>
       )}
 
-      {/* Group Info Form for logged in users */}
+      {/* Group Info Update Form (Only for Logged-In Users) */}
       {user && (
         <form
+          className="group-info-form"
           onSubmit={(e) => {
             e.preventDefault();
-            handleUpdateGroupInfo(groupInfo); // Update group info (name, description)
+            handleUpdateGroupInfo(groupInfo);
           }}
         >
           <input
@@ -134,7 +137,7 @@ const ClassDetailPage = () => {
         </form>
       )}
 
-      {/* Championship Controls for authenticated users */}
+      {/* Championship Controls (Only for Logged-In Users) */}
       {user && (
         <div className="championship-controls">
           <input
@@ -143,28 +146,30 @@ const ClassDetailPage = () => {
             onChange={(e) => setChampionshipName(e.target.value)}
             placeholder="Championship Name"
             required
-            disabled={championshipOpen} // Disable input if championship is already open
+            disabled={championshipOpen}
           />
-          <button onClick={toggleChampionship}>{championshipOpen ? 'Close Championship' : 'Open Championship'}</button>
+          <button onClick={toggleChampionship}>
+            {championshipOpen ? 'Close Championship' : 'Open Championship'}
+          </button>
           <button onClick={calculateChampionOfChampions}>Calculate Champion of Champions</button>
-
-          {/* Display the current champion when the championship ends */}
-          {currentChampion && (
-            <div>
-              <h3>Champion: {currentChampion}</h3>
-            </div>
-          )}
         </div>
       )}
 
-      {/* Student Registration Link (only for authenticated users) */}
+      {/* Registration Link Generation and Display */}
       {user && (
         <div className="student-registration">
-          <button onClick={() => setShowLink(!showLink)}>{showLink ? 'Hide Registration Link' : 'Generate Registration Link'}</button>
+          <button onClick={() => setShowLink(!showLink)}>
+            {showLink ? 'Hide Registration Link' : 'Generate Registration Link'}
+          </button>
           {showLink && (
             <div className="registration-link">
               <p>Share this link with your students:</p>
-              <input type="text" value={registrationURL} readOnly onClick={(e) => e.target.select()} />
+              <input
+                type="text"
+                value={registrationURL}
+                readOnly
+                onClick={(e) => e.target.select()}
+              />
               <Link to={`/group/${id}/register`} target="_blank">
                 Open Registration Page
               </Link>
@@ -173,7 +178,27 @@ const ClassDetailPage = () => {
         </div>
       )}
 
-      {/* Student List displayed as a table */}
+      {/* Toggle to Show Previous Championships */}
+      <div className="championship-history">
+        <button onClick={toggleShowChampionships}>
+          {showChampionships ? 'Hide Championships' : 'Show Championships'}
+        </button>
+        {showChampionships && (
+          <div className="championship-list">
+            <h4>Previous Championships:</h4>
+            <ul>
+              {groupData.championships &&
+                groupData.championships.map((champ, index) => (
+                  <li key={index}>
+                    <strong>{champ.championshipName}</strong> - Champion: {champ.champion}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* Student List Display */}
       <h3>Students</h3>
       <table className="student-table">
         <thead>
@@ -196,11 +221,14 @@ const ClassDetailPage = () => {
               <td>{student.totalPoints || 0}</td>
               {user && (
                 <td>
-                  {/* Points control for authenticated users during an active championship */}
                   {championshipOpen && (
                     <div className="points-control">
-                      <button onClick={() => handleUpdateStudentPoints(student, student.marks + 1)}>+1 Point</button>
-                      <button onClick={() => handleUpdateStudentPoints(student, student.marks - 1)}>-1 Point</button>
+                      <button onClick={() => handleUpdateStudentPoints(student, student.marks + 1)}>
+                        +1 Point
+                      </button>
+                      <button onClick={() => handleUpdateStudentPoints(student, student.marks - 1)}>
+                        -1 Point
+                      </button>
                     </div>
                   )}
                   <button onClick={() => handleRemoveStudent(student)}>Remove</button>
@@ -210,6 +238,45 @@ const ClassDetailPage = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Form to Add a New Student (Only for Logged-In Users) */}
+      {user && (
+        <form className="add-student-form" onSubmit={handleNewStudentSubmit}>
+          <h4>Add New Student</h4>
+          <input
+            type="text"
+            name="name"
+            value={newStudent.name}
+            onChange={handleNewStudentChange}
+            placeholder="Student Name"
+            required
+          />
+          <input
+            type="file"
+            name="photoFile"
+            accept="image/*"
+            onChange={handleNewStudentChange}
+            required
+          />
+          <input
+            type="date"
+            name="birthday"
+            value={newStudent.birthday}
+            onChange={handleNewStudentChange}
+            required
+          />
+          <input
+            type="number"
+            name="marks"
+            value={newStudent.marks}
+            onChange={handleNewStudentChange}
+            required
+          />
+          <button type="submit" disabled={uploading}>
+            {uploading ? 'Uploading...' : 'Add Student'}
+          </button>
+        </form>
+      )}
     </div>
   );
 };

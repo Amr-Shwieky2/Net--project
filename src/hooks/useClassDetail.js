@@ -1,16 +1,24 @@
 import { useEffect, useState } from 'react';
 import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { db, storage } from '../config/firebase-config'; // Added storage for Firebase
+import { db, storage } from '../config/firebase-config'; // Firebase Firestore and Storage imports
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import Firebase storage methods
 
 const useClassDetail = (groupId) => {
+  // State for managing group data and UI states
   const [groupData, setGroupData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [groupInfo, setGroupInfo] = useState({ name: '', description: '', image: '' });
   const [championshipOpen, setChampionshipOpen] = useState(false);
   const [currentChampion, setCurrentChampion] = useState(null);
   const [championshipName, setChampionshipName] = useState('');
-  const [championOfChampions, setChampionOfChampions] = useState(null); // Champion of Champions
+  const [championOfChampions, setChampionOfChampions] = useState(null); // Champion of Champions state
+  const [showLink, setShowLink] = useState(false); // State for displaying registration link
+  const [showChampionships, setShowChampionships] = useState(false); // State to toggle championships display
+  const [newStudent, setNewStudent] = useState({ name: '', photoFile: null, birthday: '', marks: 0 });
+  const [uploading, setUploading] = useState(false);
+
+  // Generate the correct registration URL for students using the group ID
+  const registrationURL = `${window.location.origin}/group/${groupId}/register`;
 
   // Fetch group data from Firestore
   useEffect(() => {
@@ -49,10 +57,19 @@ const useClassDetail = (groupId) => {
     const groupRef = doc(db, 'groups', groupId);
     try {
       await updateDoc(groupRef, updates);
-      setGroupData({ ...groupData, ...updates });
+      setGroupData((prevData) => ({ ...prevData, ...updates }));
     } catch (error) {
       console.error('Error updating Firestore:', error);
     }
+  };
+
+  // Function to update group information
+  const handleUpdateGroupInfo = async (updatedGroupInfo) => {
+    await updateGroupState({
+      name: updatedGroupInfo.name,
+      description: updatedGroupInfo.description,
+    });
+    setGroupInfo(updatedGroupInfo);
   };
 
   // Function to upload student photos to Firebase Storage
@@ -153,12 +170,9 @@ const useClassDetail = (groupId) => {
     setChampionOfChampions(champion); // Set the Champion of Champions
   };
 
-  // Update group info
-  const handleUpdateGroupInfo = async (groupInfo) => {
-    await updateGroupState({
-      name: groupInfo.name,
-      description: groupInfo.description,
-    });
+  // Toggle the display of all championships
+  const toggleShowChampionships = () => {
+    setShowChampionships(!showChampionships);
   };
 
   // Remove a student
@@ -182,9 +196,18 @@ const useClassDetail = (groupId) => {
     setChampionshipName,
     handleAddStudent,
     handleRemoveStudent,
-    currentChampion, // This will contain the name of the last champion
-    calculateChampionOfChampions, // Function to calculate the Champion of Champions
-    championOfChampions, // This will contain the name of the Champion of Champions
+    currentChampion,
+    calculateChampionOfChampions,
+    championOfChampions,
+    showLink,
+    setShowLink,
+    registrationURL,
+    showChampionships,
+    toggleShowChampionships,
+    newStudent,
+    setNewStudent,
+    uploading,
+    setUploading,
   };
 };
 
