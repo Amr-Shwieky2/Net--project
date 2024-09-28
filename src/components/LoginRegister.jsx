@@ -11,6 +11,7 @@ const LoginRegister = () => {
     email: '',
     password: '',
     confirmPassword: '', // Used for registration
+    secretCode: '', // New field for the secret code
   });
   const [error, setError] = useState(null);
 
@@ -22,6 +23,7 @@ const LoginRegister = () => {
       email: '',
       password: '',
       confirmPassword: '',
+      secretCode: '', // Reset secret code
     });
     setError(null);
   };
@@ -34,6 +36,12 @@ const LoginRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
+    // Validate secret code only during registration
+    if (!isLogin && formData.secretCode !== 'neta@-project') {
+      setError('Invalid secret code');
+      return;
+    }
 
     if (!isLogin && formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
@@ -85,17 +93,32 @@ const LoginRegister = () => {
             />
           </div>
           {!isLogin && (
-            <div className="form-group">
-              <label className="form-label">Confirm Password</label>
-              <input
-                type="password"
-                name="confirmPassword"
-                className="form-input"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            <>
+              <div className="form-group">
+                <label className="form-label">Confirm Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  className="form-input"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              {/* Secret Code Input Field */}
+              <div className="form-group">
+                <label className="form-label">Secret Code</label>
+                <input
+                  type="text"
+                  name="secretCode"
+                  className="form-input"
+                  value={formData.secretCode}
+                  onChange={handleChange}
+                  placeholder="Enter the secret code"
+                  required
+                />
+              </div>
+            </>
           )}
           <button type="submit" className="auth-button">
             {isLogin ? 'Login' : 'Register'}

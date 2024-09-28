@@ -4,77 +4,90 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f0f0;
-  padding: 20px; /* Added padding to ensure spacing on smaller screens */
+  background-color: #f8f8f8;
+  padding: 20px;
 }
 
 /* Form styling for login and registration */
 .auth-form {
-  background-color: #fff;
+  background-color: #ffffff;
   padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px; /* Max-width for larger screens */
+  max-width: 400px;
   text-align: center;
+  transition: all 0.3s ease-in-out;
 }
 
+/* Form Heading */
 .auth-form-heading {
-  margin-bottom: 20px;
-  font-size: 24px;
-  color: #880194; /* Your preferred primary color */
+  margin-bottom: 30px;
+  font-size: 26px;
+  color: #880194; /* Primary color */
+  font-weight: bold;
 }
 
 /* Form group for inputs */
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  text-align: left;
+  width: 100%; /* Ensure full width alignment */
 }
 
 .form-label {
   display: block;
   font-size: 14px;
-  margin-bottom: 5px;
-  color: #666;
+  margin-bottom: 8px;
+  color: #555;
 }
 
 .form-input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+  width: 100%; /* Match button width */
+  padding: 12px 15px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
   font-size: 16px;
-  box-sizing: border-box; /* Ensure input fields respect padding */
+  box-sizing: border-box;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.form-input:focus {
+  border-color: #880194;
+  outline: none;
 }
 
 /* Button styling */
 .auth-button {
   width: 100%; /* Ensure the button matches the width of the inputs */
-  padding: 12px; /* Slightly larger padding for consistency */
+  padding: 14px;
   border: none;
-  background-color: #880194; /* Your preferred primary color */
-  color: white;
+  background-color: #880194;
+  color: #ffffff;
   font-size: 16px;
-  border-radius: 4px;
+  font-weight: bold;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  box-sizing: border-box; /* Ensure button respects padding */
+  margin-top: 10px;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .auth-button:hover {
-  background-color: #660173; /* Darker shade for hover */
+  background-color: #660173;
+  box-shadow: 0 4px 12px rgba(136, 1, 148, 0.3);
 }
 
 /* Toggle text (Login/Register switch) */
 .toggle-text {
   margin-top: 20px;
-  font-size: 14px;
-  color: #666;
+  font-size: 15px;
+  color: #555;
 }
 
 .toggle-link {
-  color: #880194; /* Your preferred primary color */
+  color: #880194;
   cursor: pointer;
-  margin-left: 5px;
+  font-weight: bold;
 }
 
 .toggle-link:hover {
@@ -85,50 +98,64 @@
 .error-text {
   color: red;
   font-size: 14px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  background: #ffe6e6;
+  padding: 10px;
+  border: 1px solid #ff0000;
+  border-radius: 6px;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .auth-form {
     padding: 30px;
-    width: 100%;
-    max-width: 90%; /* Make the form almost full-width on smaller screens */
+    max-width: 95%;
   }
 
   .auth-form-heading {
-    font-size: 20px; /* Slightly smaller for mobile screens */
+    font-size: 22px;
   }
 
   .auth-button {
-    padding: 12px; /* Slightly bigger buttons for touch screens */
+    padding: 12px;
   }
 
   .form-input {
     font-size: 14px;
+    padding: 10px 12px;
   }
 }
 
 @media (max-width: 480px) {
   .auth-form {
     padding: 20px;
-    width: 100%;
-    max-width: 100%; /* Full width for smaller devices */
+    max-width: 100%;
   }
 
   .auth-form-heading {
-    font-size: 18px; /* Smaller heading for mobile */
+    font-size: 20px;
   }
 
   .form-group {
-    margin-bottom: 15px; /* Less spacing between form fields */
+    margin-bottom: 20px;
   }
 
   .form-input {
-    padding: 8px; /* Smaller padding for input fields on smaller screens */
+    padding: 10px 12px;
+    font-size: 14px;
   }
 
   .auth-button {
-    font-size: 14px; /* Slightly smaller button text */
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .toggle-text {
+    font-size: 14px;
+  }
+
+  .error-text {
+    font-size: 12px;
+    padding: 8px;
   }
 }
