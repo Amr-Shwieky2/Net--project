@@ -17,6 +17,7 @@
   align-items: center;
 }
 
+/* Navbar Button Styles */
 .navbar-button {
   padding: 8px 16px;
   margin-left: 15px;
@@ -26,21 +27,113 @@
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
+  border: 2px solid transparent;
+  transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
 }
 
 .navbar-button:hover {
   background-color: #9e02ac;
   color: white;
+  border: 2px solid white;
 }
 
-/* Hide only the extra buttons (About Us, Contact Us, Privacy Policy) on small screens (phones) */
+/* Notification Icon and Dropdown Styles */
+.notification-icon {
+  position: relative;
+  cursor: pointer;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.bell-icon {
+  font-size: 24px;
+  color: white;
+}
+
+.notification-count {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #ff0000;
+  color: white;
+  border-radius: 50%;
+  padding: 3px 7px;
+  font-size: 14px;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background: white;
+  color: #880194;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  z-index: 1000;
+}
+
+.notification-dropdown h4 {
+  padding: 10px;
+  margin: 0;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.notification-dropdown ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 10px;
+}
+
+.notification-dropdown li {
+  padding: 5px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.notification-dropdown li:last-child {
+  border-bottom: none;
+}
+
+/* Media Queries for Responsiveness */
+
+/* Mobile Phones */
 @media (max-width: 600px) {
-  .navbar-links .navbar-button:not(:last-child) {
-    display: none; /* Hide all buttons except the last one (Login/Logout) */
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .navbar-logo img {
-    height: 45px; /* Adjust logo size for smaller screens */
+    height: 40px;
+    margin-bottom: 10px;
+  }
+
+  .navbar-links {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Hide extra buttons (About, Contact, Privacy) on small screens */
+  .navbar-links .navbar-button:not(:last-child) {
+    display: none;
+  }
+
+  /* Adjust notification icon size */
+  .bell-icon {
+    font-size: 20px;
+  }
+
+  .navbar-button {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .notification-dropdown {
+    width: 250px;
+    top: 40px;
   }
 }
 
@@ -58,6 +151,14 @@
     font-size: 15px;
     padding: 8px 14px;
   }
+
+  .bell-icon {
+    font-size: 22px;
+  }
+
+  .notification-dropdown {
+    width: 280px;
+  }
 }
 
 /* Desktops */
@@ -73,4 +174,22 @@
   .navbar-button {
     font-size: 16px;
   }
+
+  .bell-icon {
+    font-size: 24px;
+  }
+
+  .notification-dropdown {
+    width: 300px;
+  }
+}
+
+/* Additional Styles for a Better UX */
+.notification-dropdown ul {
+  max-height: 200px; /* Limit the dropdown height */
+  overflow-y: auto; /* Add scrolling if there are too many items */
+}
+
+.notification-dropdown li:hover {
+  background-color: #f0f0f0;
 }
