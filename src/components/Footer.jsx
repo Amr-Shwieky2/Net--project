@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
 import { Link } from 'react-router-dom';
-import "./style/Footer.css"; // Assuming you create a separate CSS file for the footer
+import "./style/Footer.css";
 
 const Footer = () => {
   return (
@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="footer-content">
         <div className="footer-logo">
           <Link to="/">
-            <img src="logo-neta.png" alt="logo" className="footer-logo-img" />
+            <h3 className="footer-logo-text">Net@</h3>
           </Link>
         </div>
         <div className="footer-links">
@@ -19,7 +19,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} MyApp. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Net@ Project. All rights reserved.</p>
       </div>
     </footer>
   );

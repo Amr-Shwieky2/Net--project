@@ -18,7 +18,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-logo">
         <Link to="/">
-          <img src="logo-neta2.png" alt="logo" />
+        <h3 style={{ color: 'white', margin: 0 }}>Net@</h3>
         </Link>
       </div>
 

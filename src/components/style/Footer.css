@@ -1,89 +1,102 @@
 /* Styles for the footer */
 .footer {
-    background-color: #880194;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
+  background-color: #880194; /* Primary color */
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
+  width: 100%; /* Ensure the footer spans the full width */
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  width: 100%; /* Ensure consistent spacing */
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+}
+
+.footer-logo-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff; /* Make sure the text color is white */
+  margin: 0;
+  text-transform: uppercase; /* Optional: Capitalize the logo text */
+  visibility: visible; /* Ensure the logo text is visible */
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-link {
+  color: #ffffff; /* Ensure the link text color is white */
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s ease-in-out;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+  color: #ffcc66; /* Secondary accent color for hover */
+}
+
+.footer-bottom {
+  margin-top: 20px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.footer-bottom p {
+  color: #ffcc66; /* Use the secondary accent color */
+}
+
+/* Responsive Design */
+
+/* For Mobile Phones */
+@media (max-width: 600px) {
   .footer-content {
-    display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 10px 20px;
-    
+    padding: 20px 10px; /* Adjust padding for smaller screens */
   }
-  
-  .footer-logo {
-    display: flex;
-    align-items: center;
-  }
-  
-  .footer-logo-img {
-    width: 100px;
-    height: auto;
-  }
-  
+
   .footer-links {
-    display: flex;
-    gap: 20px;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
   }
-  
-  .footer-link {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
+
+  .footer-logo-text {
+    font-size: 20px; /* Adjust logo size for smaller screens */
   }
-  
-  .footer-link:hover {
-    text-decoration: underline;
-    color: #f89430;
-  }
-  
+
   .footer-bottom {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #f89430;
+    font-size: 12px;
   }
-  .footer-bottom p{
-    color: #f2983e;
+}
+
+/* For Tablets */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
   }
-  
-  /* Responsive Design */
-  
-  /* For Mobile Phones */
-  @media (max-width: 600px) {
-    .footer-content {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .footer-links {
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-    }
-  
-    .footer-logo-img {
-      width: 80px;
-    }
-  
-    .footer-bottom {
-      font-size: 12px;
-    }
+
+  .footer-links {
+    margin-top: 10px;
   }
-  
-  /* For Tablets */
-  @media (min-width: 601px) and (max-width: 1024px) {
-    .footer-logo-img {
-      width: 90px;
-    }
-  
-    .footer-link {
-      font-size: 15px;
-    }
+
+  .footer-link {
+    font-size: 15px;
   }
-  
+}
