@@ -1,0 +1,70 @@
+.student-register-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  h1 {
+    color: #6d1e9c;
+    margin-bottom: 20px;
+  }
+  
+  .student-register-form input {
+    width: 90%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .student-register-form button {
+    width: 100%;
+    padding: 12px;
+    margin: 20px 0;
+    background: #6d1e9c;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .student-register-form button:disabled {
+    background: #ddd;
+    cursor: not-allowed;
+  }
+  
+  .success-message {
+    font-size: 18px;
+    color: #28a745;
+  }
+  
+  .back-to-group-button {
+    display: block;
+    margin-top: 20px;
+    color: #6d1e9c;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .back-to-group-button:hover {
+    text-decoration: underline;
+  }
+  
+  /* Responsive Design for Small Screens */
+  @media (max-width: 600px) {
+    .student-register-container {
+      padding: 20px;
+    }
+  
+    .student-register-form input,
+    .student-register-form button {
+      width: 100%;
+      font-size: 14px;
+    }
+  }
+  

@@ -1,13 +1,14 @@
+/* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import useClassDetail from '../hooks/useClassDetail';
-import './style/groupdetail.css'; // Assuming you have a stylesheet for the component
+import './style/groupdetail.css'; // Assuming you have a CSS file for styling
 
 const ClassDetailPage = () => {
   const { id } = useParams(); // Get the group ID from the URL
-  const { user } = useAuth(); // Assuming you have an AuthContext that provides user info
+  const { user } = useAuth(); // Get user data from the authentication context
   const {
     groupData,
     loading,
@@ -26,16 +27,20 @@ const ClassDetailPage = () => {
     championOfChampions,
   } = useClassDetail(id);
 
+  const [showLink, setShowLink] = useState(false); // State to toggle visibility of the registration link
   const [newStudent, setNewStudent] = useState({ name: '', photoFile: null, birthday: '', marks: 0 });
   const [uploading, setUploading] = useState(false);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; // Show loading spinner while data is being fetched
   }
 
   if (!groupData) {
-    return <div>Group not found!</div>;
+    return <div>Group not found!</div>; // Show message if the group data doesn't exist
   }
+
+  // Generate the correct registration URL for students using the group ID
+  const registrationURL = `${window.location.origin}/group/${id}/register`;
 
   // Handle form input for new students
   const handleNewStudentChange = (e) => {
@@ -101,11 +106,7 @@ const ClassDetailPage = () => {
       {championOfChampions && (
         <div className="champion-display">
           <h3>Champion of Champions: {championOfChampions.name}</h3>
-          <img
-            src={championOfChampions.photo}
-            alt={championOfChampions.name}
-            className="champion-photo"
-          />
+          <img src={championOfChampions.photo} alt={championOfChampions.name} className="champion-photo" />
         </div>
       )}
 
@@ -145,15 +146,29 @@ const ClassDetailPage = () => {
             required
             disabled={championshipOpen} // Disable input if championship is already open
           />
-          <button onClick={toggleChampionship}>
-            {championshipOpen ? 'Close Championship' : 'Open Championship'}
-          </button>
+          <button onClick={toggleChampionship}>{championshipOpen ? 'Close Championship' : 'Open Championship'}</button>
           <button onClick={calculateChampionOfChampions}>Calculate Champion of Champions</button>
 
           {/* Display the current champion when the championship ends */}
           {currentChampion && (
             <div>
               <h3>Champion: {currentChampion}</h3>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Student Registration Link (only for authenticated users) */}
+      {user && (
+        <div className="student-registration">
+          <button onClick={() => setShowLink(!showLink)}>{showLink ? 'Hide Registration Link' : 'Generate Registration Link'}</button>
+          {showLink && (
+            <div className="registration-link">
+              <p>Share this link with your students:</p>
+              <input type="text" value={registrationURL} readOnly onClick={(e) => e.target.select()} />
+              <Link to={`/group/${id}/register`} target="_blank">
+                Open Registration Page
+              </Link>
             </div>
           )}
         </div>
@@ -185,12 +200,8 @@ const ClassDetailPage = () => {
                   {/* Points control for authenticated users during an active championship */}
                   {championshipOpen && (
                     <div className="points-control">
-                      <button onClick={() => handleUpdateStudentPoints(student, student.marks + 1)}>
-                        +1 Point
-                      </button>
-                      <button onClick={() => handleUpdateStudentPoints(student, student.marks - 1)}>
-                        -1 Point
-                      </button>
+                      <button onClick={() => handleUpdateStudentPoints(student, student.marks + 1)}>+1 Point</button>
+                      <button onClick={() => handleUpdateStudentPoints(student, student.marks - 1)}>-1 Point</button>
                     </div>
                   )}
                   <button onClick={() => handleRemoveStudent(student)}>Remove</button>
@@ -200,47 +211,6 @@ const ClassDetailPage = () => {
           ))}
         </tbody>
       </table>
-
-      {/* Form to add a new student */}
-      {user && (
-        <form onSubmit={handleNewStudentSubmit}>
-          <h4>Add New Student</h4>
-          <input
-            type="text"
-            name="name"
-            value={newStudent.name}
-            onChange={handleNewStudentChange}
-            placeholder="Student Name"
-            required
-          />
-          <input
-            type="file"
-            name="photoFile"
-            accept="image/*"
-            onChange={handleNewStudentChange}
-            required
-          />
-          <input
-            type="date"
-            name="birthday"
-            value={newStudent.birthday}
-            onChange={handleNewStudentChange}
-            placeholder="Student Birthday"
-            required
-          />
-          <input
-            type="number"
-            name="marks"
-            value={newStudent.marks}
-            onChange={handleNewStudentChange}
-            placeholder="Initial Points"
-            required
-          />
-          <button type="submit" disabled={uploading}>
-            {uploading ? 'Uploading...' : 'Add Student'}
-          </button>
-        </form>
-      )}
     </div>
   );
 };

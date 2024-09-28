@@ -1,208 +1,260 @@
-/* General styling for the container */
+/* Container Styling */
 .class-detail-container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 20px;
-  font-family: 'Arial', sans-serif;
   background-color: #f9f9f9;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-  font-size: 2.5rem;
-  color: #333;
-  margin-bottom: 10px;
+/* Heading Styles */
+h1, h3 {
+  color: #6d1e9c;
   text-align: center;
+  margin: 15px 0;
 }
 
-h3 {
-  font-size: 1.5rem;
-  color: #555;
-  margin-top: 30px;
-  margin-bottom: 20px;
-}
-
-p {
-  color: #666;
-  line-height: 1.6;
-  font-size: 1.1rem;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* Group / Champion Image Display */
+/* Image Display */
 .image-display {
   text-align: center;
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
-.group-image, .champion-photo {
-  width: 150px;
-  height: 150px;
+.group-image, .champion-photo, .student-photo {
+  max-width: 30%;
+  max-height: 30%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.champion-photo, .student-photo {
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
+  border: 3px solid #6d1e9c;
   object-fit: cover;
-  border: 3px solid #333;
-  margin-top: 10px;
+  margin: 10px auto;
 }
 
-/* Champion of Champions Section */
+/* Champion Display */
 .champion-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+}
+
+/* Table Styling */
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 30px 0;
+}
+
+.student-table th, .student-table td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.student-table th {
+  background-color: #6d1e9c;
+  color: white;
+}
+
+.student-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.student-table img {
+  border-radius: 50%;
+}
+
+/* Button Styling */
+.points-control button {
+  background-color: #6d1e9c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.points-control button:hover {
+  background-color: #5a1b7e;
+}
+
+.student-registration {
   text-align: center;
   margin: 30px 0;
 }
 
-.champion-display h3 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+.student-registration button {
+  background-color: #6d1e9c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.champion-display img {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 3px solid #444;
+.student-registration button:hover {
+  background-color: #5a1b7e;
 }
 
-/* Form styling */
-form {
-  margin-bottom: 20px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+/* Registration Link Styling */
+.registration-link {
+  margin-top: 20px;
+  text-align: center;
 }
 
-form input, form textarea {
-  width: 100%;
-  padding: 10px;
+.registration-link p {
+  font-size: 14px;
+  color: #333;
+}
+
+.registration-link input {
+  width: 80%;
+  padding: 8px;
   margin: 10px 0;
   border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.registration-link a {
+  display: block;
+  text-decoration: none;
+  color: #6d1e9c;
+  margin-top: 10px;
+}
+
+.registration-link a:hover {
+  text-decoration: underline;
+}
+
+/* Form Styling */
+form {
+  margin-top: 20px;
+}
+
+form input, form textarea, form button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
   border-radius: 5px;
-  font-size: 1rem;
+  border: 1px solid #ddd;
+}
+
+form textarea {
+  resize: none;
 }
 
 form button {
-  background-color: #28a745;
+  background-color: #6d1e9c;
   color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  border: none;
 }
 
 form button:hover {
-  background-color: #218838;
+  background-color: #5a1b7e;
 }
 
 /* Championship Controls */
 .championship-controls {
-  background-color: #f4f4f4;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
   text-align: center;
-  margin-bottom: 30px;
+}
+
+.championship-controls input, .championship-controls button {
+  display: inline-block;
+  margin: 10px 5px;
+  padding: 10px 15px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
 }
 
 .championship-controls input {
-  width: 70%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  width: 200px;
+  max-width: 100%;
 }
 
 .championship-controls button {
-  background-color: #007bff;
+  background-color: #6d1e9c;
   color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-left: 10px;
+  border: none;
 }
 
 .championship-controls button:hover {
-  background-color: #0056b3;
+  background-color: #5a1b7e;
 }
 
-/* Student Table */
-.student-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-}
+/* Responsive Design */
 
-.student-table th, .student-table td {
-  border: 1px solid #ddd;
-  padding: 12px 15px;
-  text-align: center;
-}
-
-.student-table th {
-  background-color: #f4f4f4;
-  color: #333;
-}
-
-.student-table td {
-  background-color: #fff;
-}
-
-.student-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-/* Student Photo in Table */
-.student-photo {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 2px solid #333;
-}
-
-/* Points Control Buttons */
-.points-control button {
-  background-color: #ffc107;
-  color: white;
-  padding: 5px 10px;
-  margin: 0 5px;
-  border: none;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-.points-control button:hover {
-  background-color: #e0a800;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .championship-controls input {
-    width: 100%;
-  }
-
+/* Small devices (phones, 600px and below) */
+@media (max-width: 600px) {
   .student-table th, .student-table td {
-    padding: 10px;
+    padding: 8px 10px;
   }
 
-  .student-photo {
-    width: 40px;
-    height: 40px;
+  .student-table th {
+    font-size: 14px;
   }
 
-  .champion-photo, .group-image {
-    width: 100px;
-    height: 100px;
+  .student-table td {
+    font-size: 12px;
   }
 
-  .champion-display img {
-    width: 100px;
-    height: 100px;
+  form input, form textarea, form button {
+    font-size: 14px;
+  }
+
+  .points-control button {
+    padding: 5px 8px;
+  }
+
+  .student-registration button {
+    padding: 8px 15px;
+  }
+}
+
+/* Medium devices (tablets, 768px and below) */
+@media (max-width: 768px) {
+  .student-table th, .student-table td {
+    padding: 10px 12px;
+  }
+
+  form input, form textarea, form button {
+    font-size: 16px;
+  }
+
+  .points-control button {
+    padding: 7px 10px;
+  }
+
+  .student-registration button {
+    padding: 9px 18px;
+  }
+
+  .champion-photo, .student-photo {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+/* Large devices (laptops/desktops, 1024px and below) */
+@media (max-width: 1024px) {
+  .student-table th, .student-table td {
+    padding: 10px 15px;
+  }
+
+  .champion-photo, .student-photo {
+    width: 75px;
+    height: 75px;
   }
 }
